@@ -1,0 +1,96 @@
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["filterJson", "InteractiveTransactions"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      =  env("DATABASE_URL")
+}
+
+enum Role {
+    ADMIN
+    USER
+}
+
+model User {
+    id        BigInt @id @default(autoincrement())
+    email     String @unique @db.VarChar(50)
+    password  String @db.VarChar(2000)
+    firstName String @db.VarChar(25)
+    lastName  String @db.VarChar(25)
+    role      Role   @default(USER)
+
+    @@index([email], map: "index_user_email")
+    @@index([firstName], map: "index_user_firstName")
+    @@index([lastName], map: "index_user_lastName")
+}
+
+model Categories {
+    id             BigInt @id @default(autoincrement())
+
+    title          String @db.VarChar(50)
+    description    String @db.VarChar(500)
+
+    CategoryCourse CategoryCourse[]
+    ImageModel     ImageModel[]
+
+    @@index([title], map: "index_category_title")
+}
+
+model CategoryCourse {
+  id          BigInt     @id @default(autoincrement())
+
+  categoryId  BigInt
+  courseId    BigInt
+
+  Categories  Categories @relation(fields: [categoryId], references: [id], onDelete: NoAction)
+  Courses     Courses    @relation(fields: [courseId],   references: [id], onDelete: NoAction)
+}
+
+model Courses {
+    id             BigInt           @id @default(autoincrement())
+    title          String           @db.VarChar(50)
+    shortTitle    String            @db.VarChar(25)
+    description    String           @db.VarChar(500)
+    price          BigInt?
+
+    Lessons        Lessons[]
+    CategoryCourse CategoryCourse[]
+    ImageModel     ImageModel[]
+
+    @@index([title], map: "index_course_title")
+}
+
+model Lessons {
+    id                 BigInt  @id @default(autoincrement())
+    title              String  @db.VarChar(50)
+    shortTitle         String? @db.VarChar(25)
+    description        String  @db.VarChar(500)
+    secondDescription  String? @db.VarChar(500)
+
+    VideoModel         VideoModel[]
+
+    courseId           BigInt?
+    Courses            Courses? @relation(fields: [courseId], references: [id], onDelete: NoAction)
+
+    @@index([shortTitle], map: "index_lessons_short_title")
+}
+
+model VideoModel {
+    id       BigInt @id @default(autoincrement())
+    link     String @db.VarChar(2000)
+
+    lessonId BigInt?
+    Lessons  Lessons? @relation(fields: [lessonId], references: [id], onDelete:NoAction)
+}
+
+model ImageModel {
+    id         BigInt @id @default(autoincrement())
+    link       String
+    courseId   BigInt?
+    categoryId BigInt?
+
+    Categories Categories? @relation(fields: [categoryId], references: [id], onDelete:NoAction) 
+    Courses    Courses?    @relation(fields: [courseId],   references: [id], onDelete:NoAction)
+}
