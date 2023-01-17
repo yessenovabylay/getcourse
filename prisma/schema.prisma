@@ -33,7 +33,6 @@ model Categories {
     description    String @db.VarChar(500)
 
     CategoryCourse CategoryCourse[]
-    ImageModel     ImageModel[]
 
     @@index([title], map: "index_category_title")
 }
@@ -77,6 +76,7 @@ model Lessons {
     @@index([shortTitle], map: "index_lessons_short_title")
 }
 
+
 model VideoModel {
     id       BigInt @id @default(autoincrement())
     link     String @db.VarChar(2000)
@@ -89,8 +89,6 @@ model ImageModel {
     id         BigInt @id @default(autoincrement())
     link       String
     courseId   BigInt?
-    categoryId BigInt?
-
-    Categories Categories? @relation(fields: [categoryId], references: [id], onDelete:NoAction) 
+ 
     Courses    Courses?    @relation(fields: [courseId],   references: [id], onDelete:NoAction)
 }

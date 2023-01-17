@@ -9,14 +9,14 @@ const Response = require("../utils/Response")
 router
 
 .post("/",isAuth, upload.array("lessonImg",3), async(req, res) => {
-    try{
-        let { title,shortTitle,description,secondDescription } = req.body;
-        const { parseFiles } = req;
+        try{
+            let { title,shortTitle,description,secondDescription } = req.body;
+            const { parseFiles } = req;
 
-        const createLesson = await LessonController.create(
-            {title,shortTitle,description,secondDescription,parseFiles}
-            )
-        return res.json(new Response().data(createLesson));
+            const createLesson = await LessonController.create(
+                {title,shortTitle,description,secondDescription,parseFiles}
+                )
+            return res.json(new Response().data(createLesson));
         }catch(err)
         {
             return res.status(500).json(new Response().error(err));

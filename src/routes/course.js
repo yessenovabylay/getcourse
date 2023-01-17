@@ -6,11 +6,13 @@ const parseFiles = require('../middlewares/upload-files')
 const dateHelp = require("../utils/Date")
 const Response = require("../utils/Response")
 
+
+
 router
 
 .post("/",isAuth, upload.array("lessonImg",3), async(req, res) => {
     try{
-        let { title,shortTitle,description,secondDescription } = req.body;
+        let { title,description } = req.body;
         const { parseFiles } = req;
 
         const createCourse = await CourseController.create(

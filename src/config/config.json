@@ -1,8 +1,4 @@
 {
-    "secret_key": "getcourse",
-    "redis": { 
-        "host" : "localhost",
-        "port": 6379
-    }
+    "secret_key": "getcourse"
 }
 

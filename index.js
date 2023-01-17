@@ -3,7 +3,6 @@ const cors = require("cors");
 const bodyParser = require("body-parser");
 const routes = require("./src/routes");
 require("dotenv").config();
-const redis = require('./src/cache-storage/redisClient')
 
 
 const app = express();

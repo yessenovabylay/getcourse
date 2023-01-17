@@ -1,0 +1,24 @@
+# docker-compose.yml
+
+version: "3.9"
+services:
+  postgres:
+    image: postgres:15-alpine
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - '6432:5432'
+    volumes:
+      - course-get-db:/var/lib/postgresql/data
+
+  course-get:
+    build: 
+      context: .
+    depends_on:
+      - postgres
+    ports:
+      - '5555:5555'
+
+volumes:
+  course-get-db:
